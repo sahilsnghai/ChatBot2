@@ -19,5 +19,4 @@ uv.lock
 
 .env
 
-app/api
 app/core
