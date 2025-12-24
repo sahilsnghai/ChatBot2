@@ -22,12 +22,13 @@ class BookingDetails(BaseModel):
     service: Optional[str] = Field(
         description="The service the user wants to book if provided, else null."
     )
-    time: Optional[datetime] = Field(
+    time: Optional[str] = Field(
         description="The preferred time for the appointment if provided, else null."
     )
     phone: Optional[str] = Field(
         description="The user's phone number if provided, else null."
     )
+
 
 
 class AgentState(TypedDict):
@@ -49,7 +50,7 @@ def classify_intent(state: AgentState):
     last_message = messages[-1].content
     booking_info = state.get("booking_info", {})
 
-    print(f"Classifying intent for message: '{last_message[:30]}...'")
+    print(f"Classifying intent for message: '{last_message}'")
     print(f"Current booking info: {booking_info}")
 
     structured_llm = llm.with_structured_output(IntentClassification)
@@ -74,7 +75,7 @@ def classify_intent(state: AgentState):
 
 def retrieve_node(state: AgentState):
     query = state["messages"][-1].content
-    print(f"Retrieving context for query: '{query[:30]}...'")
+    print(f"Retrieving context for query: '{query}'")
     context = retrieve_context(query)
     print(f"Retrieved context length: {len(context)} characters")
     return {"context": context}
@@ -85,7 +86,7 @@ def booking_node(state: AgentState):
     messages = state["messages"]
     booking_info = state.get("booking_info", {}) or {}
 
-    print(f"Processing booking node...")
+    print(f"Processing booking node")
     print(f"Current booking info: {booking_info}")
 
     structured_llm = llm.with_structured_output(BookingDetails)
@@ -127,7 +128,7 @@ def booking_node(state: AgentState):
         )
         return {"messages": [AIMessage(content=response_text)], "booking_info": booking_info}
 
-    print(f"Need to collect missing information...")
+    print(f"Need to collect missing information")
     prompt_missing = f"""
     You are a receptionist at Elite Body Home Clinic.
     The user wants to book an appointment.
@@ -137,7 +138,7 @@ def booking_node(state: AgentState):
     Politely ask the user for the missing details.
     """
     response = llm.invoke(prompt_missing)
-    print(f"Asked user for missing info: {response.content[:50]}...")
+    print(f"Asked user for missing info: {response.content}")
     return {"messages": [response], "booking_info": booking_info}
 
 
@@ -146,7 +147,7 @@ def general_response_node(state: AgentState):
     messages = state["messages"]
     context = state.get("context", "")
 
-    print(f"Generating general response...")
+    print(f"Generating general response")
     print(f"Context available: {'Yes' if context else 'No'}")
     if context:
         print(f"Context length: {len(context)} characters")
@@ -165,7 +166,7 @@ def general_response_node(state: AgentState):
     messages_payload.extend(messages)
 
     response = llm.invoke(messages_payload)
-    print(f"Generated response: {response.content[:50]}...")
+    print(f"Generated response: {response.content}")
     return {"messages": [response]}
 
 

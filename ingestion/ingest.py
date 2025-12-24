@@ -18,7 +18,7 @@ def ingest_data():
         print(f"Data file not found at {DATA_PATH}")
         return
 
-    print(f"Loading data from {DATA_PATH}...")
+    print(f"Loading data from {DATA_PATH}")
     loader = TextLoader(DATA_PATH)
     documents = loader.load()
 
@@ -33,7 +33,7 @@ def ingest_data():
         print("Error: OPENAI_API_KEY not found in environment variables.")
         return
 
-    print("Creating embeddings and storing in ChromaDB...")
+    print("Creating embeddings and storing in ChromaDB")
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
     vector_store = Chroma(
