@@ -1,6 +1,6 @@
-# Elite Body Home Clinic Chatbot
+# Clinic Chatbot
 
-This project implements an AI-powered chatbot for Elite Body Home Clinic using FastAPI, LangChain, LangGraph, and ChromaDB.
+This project implements an AI-powered chatbot for Home Clinic using FastAPI, LangChain, LangGraph, and ChromaDB.
 
 ## Features
 
